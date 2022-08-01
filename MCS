@@ -1,5 +1,5 @@
 local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/shlexware/Orion/main/source')))()
-local Window = OrionLib:MakeWindow({Name = "Sparz", HidePremium = false, SaveConfig = false, ConfigFolder = "OrionTest"})
+local Window = OrionLib:MakeWindow({Name = "Sparz", HidePremium = false, SaveConfig = false, ConfigFolder = "Sparz", IntroEnabled = true, IntroText = "Sparz Menu by Eriz", IntroIcon = ""})
 repeat task.wait() until game:IsLoaded()
 local sfm = require(game.ReplicatedStorage.Modules:WaitForChild("SuffixModule"))
 local pm = require(game:GetService("ReplicatedStorage").Modules.pickaxesModule)
@@ -25,7 +25,7 @@ OrionLib:MakeNotification({
 -------------------------------------------------------
 local Tab = Window:MakeTab({
     Name = "General",
-    Icon = "rbxassetid://4483345998",
+    Icon = "rbxassetid://4177208138",
     PremiumOnly = false
 })
 
@@ -59,7 +59,7 @@ auto:AddToggle({
 -------------------------------------------------------
 local egg = Window:MakeTab({
     Name = "Eggs",
-    Icon = "rbxassetid://4483345998",
+    Icon = "rbxassetid://9194077649",
     PremiumOnly = false
 })
 
@@ -151,11 +151,15 @@ pet:AddToggle({
 -------------------------------------------------------
 local pets = Window:MakeTab({
     Name = "Pets",
-    Icon = "rbxassetid://4483345998",
+    Icon = "rbxassetid://4814044817",
     PremiumOnly = false
 })
 
-pets:AddButton({
+local upg = pets:AddSection({
+    Name = "Upgrades"
+})
+
+upg:AddButton({
     Name = "Upgrade Pets",
     Callback = function()
         for i,v in pairs(game:GetService("HttpService"):JSONDecode(game.Players.LocalPlayer:GetAttribute("inventory"))) do
@@ -172,7 +176,7 @@ pets:AddButton({
 -------------------------------------------------------
 local misc = Window:MakeTab({
     Name = "Misc",
-    Icon = "rbxassetid://4483345998",
+    Icon = "rbxassetid://10016751132",
     PremiumOnly = false
 })
 
@@ -192,6 +196,14 @@ misc:AddButton({
             Image = "rbxassetid://4483345998",
             Time = 1.5
         })
+    end
+})
+misc:AddButton({
+    Name = "Anti AFK",
+    Callback = function()
+        for i,v in pairs(getconnections(Players.LocalPlayer.Idled)) do
+          v:Disable()
+        end
     end
 })
 
@@ -222,6 +234,15 @@ misc:AddButton({
         })
     end    
 })
+-------------------------------------------------------
+local cred = Window:MakeTab({
+    Name = "Credits",
+    Icon = "rbxassetid://2831361431",
+    PremiumOnly = false
+})
+
+cred:AddLabel("Developed by Eriz")
+cred:AddLabel("Interface by shlexware")
 -------------------------------------------------------
 game:GetService("RunService").RenderStepped:Connect(function()
     local rebirths = lp:GetAttribute("Rebirths")
