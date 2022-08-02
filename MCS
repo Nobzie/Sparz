@@ -13,13 +13,15 @@ local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/shl
 local Window = OrionLib:MakeWindow({Name = "Sparz", HidePremium = false, SaveConfig = false, ConfigFolder = "Sparz", IntroEnabled = true, IntroText = "Sparz Menu by Eriz", IntroIcon = ""})
 repeat task.wait() until game:IsLoaded()
 local sfm = require(game.ReplicatedStorage.Modules:WaitForChild("SuffixModule"))
+local m = (game:GetService("ReplicatedStorage")):WaitForChild("Modules")
+local uiCaller = require(m:WaitForChild("tweenController"))
 local pm = require(game:GetService("ReplicatedStorage").Modules.pickaxesModule)
 
-local twcodes = {"UPDATE6", "UPDATE5", "UPDATE4", "Spyder", "10KLikes", "1KLIKES", "RELEASE", "20KLIKES", "UPDATE3", "30KLIKES"}
+local twcodes = {"UPDATE6", "UPDATE5", "UPDATE4", "UPDATE3", "30KLIKES", "10KLIKES", "20KLIKES", "1KLIKES", "RELEASE", "Spyder"}
 local selectedegg = "Starter Egg"
 local amount = 1
 local valnum = 1
-local eggvalues = {se = 320, spe = 1200,fe = 10000,de = 100000,sne = 1000000,ce = 7500000,oe = 20000000,je = 120000000,ve = 400000000,spae = 1800000000,ue = 15000000000,he = 150000000000,dve = 500000000000,foe = 100000000000000,te = 500000000000000,me = 15000000000000000,ole = 35000000000000000,de = 300000000000000000}
+local eggvalues = {se = 320, spe = 1200, fe = 10000, de = 100000, sne = 1000000, ce = 7500000, oe = 20000000, je = 120000000, ve = 400000000, spae = 1800000000, ue = 15000000000, he = 150000000000, dve = 500000000000, foe = 100000000000000, te = 500000000000000, me = 15000000000000000, ole = 35000000000000000, de = 300000000000000000}
 local lp = game.Players.LocalPlayer
 local total
 local autorebirth = false
@@ -171,7 +173,7 @@ local upg = pets:AddSection({
 })
 
 upg:AddButton({
-    Name = "Upgrade Pets",
+    Name = "Upgrade Pets Fully",
     Callback = function()
         for i,v in pairs(game:GetService("HttpService"):JSONDecode(game.Players.LocalPlayer:GetAttribute("inventory"))) do
             for a,b in pairs(v) do
@@ -180,6 +182,61 @@ upg:AddButton({
                     game:GetService("ReplicatedStorage").Remotes.CraftToGold:FireServer(b,"Diamond")
                     game:GetService("ReplicatedStorage").Remotes.CraftToGold:FireServer(b,"Emerald")
                     game:GetService("ReplicatedStorage").Remotes.CraftToGold:FireServer(b,"Darkmatter") 
+            end
+        end
+    end
+})
+
+upg:AddButton({
+    Name = "Upgrade Pets to Gold",
+    Callback = function()
+        for i,v in pairs(game:GetService("HttpService"):JSONDecode(game.Players.LocalPlayer:GetAttribute("inventory"))) do
+            for a,b in pairs(v) do
+                    game:GetService("ReplicatedStorage").Remotes.CraftToGold:FireServer(b)
+            end
+        end
+    end
+})
+
+upg:AddButton({
+    Name = "Upgrade Pets to Diamond",
+    Callback = function()
+        for i,v in pairs(game:GetService("HttpService"):JSONDecode(game.Players.LocalPlayer:GetAttribute("inventory"))) do
+            for a,b in pairs(v) do
+                    game:GetService("ReplicatedStorage").Remotes.CraftToGold:FireServer(b,"Golden")
+            end
+        end
+    end
+})
+
+upg:AddButton({
+    Name = "Upgrade Pets to Emerald",
+    Callback = function()
+        for i,v in pairs(game:GetService("HttpService"):JSONDecode(game.Players.LocalPlayer:GetAttribute("inventory"))) do
+            for a,b in pairs(v) do
+                    game:GetService("ReplicatedStorage").Remotes.CraftToGold:FireServer(b,"Diamond")
+            end
+        end
+    end
+})
+
+upg:AddButton({
+    Name = "Upgrade Pets to Dark Matter",
+    Callback = function()
+        for i,v in pairs(game:GetService("HttpService"):JSONDecode(game.Players.LocalPlayer:GetAttribute("inventory"))) do
+            for a,b in pairs(v) do
+                    game:GetService("ReplicatedStorage").Remotes.CraftToGold:FireServer(b,"Emerald")
+            end
+        end
+    end
+})
+
+upg:AddButton({
+    Name = "Upgrade Pets to Sunfire",
+    Callback = function()
+        for i,v in pairs(game:GetService("HttpService"):JSONDecode(game.Players.LocalPlayer:GetAttribute("inventory"))) do
+            for a,b in pairs(v) do
+                    game:GetService("ReplicatedStorage").Remotes.CraftToGold:FireServer(b,"Darkmatter")
             end
         end
     end
@@ -261,6 +318,22 @@ misc:AddButton({
             Image = "rbxassetid://4483345998",
             Time = 1.5
         })
+    end    
+})
+
+local userint = misc:AddSection({
+    Name = "User Interface"
+})
+userint:AddButton({
+    Name = "Open Pet Index",
+    Callback = function()
+        uiCaller.openUI("glossary12345")
+    end    
+})
+userint:AddButton({
+    Name = "Open Potion Shop",
+    Callback = function()
+        uiCaller.openUI("potionShop123")
     end    
 })
 -------------------------------------------------------
