@@ -1,3 +1,14 @@
+--[[
+                                      
+ ,---.                                
+'   .-'  ,---.  ,--,--.,--.--.,-----. 
+`.  `-. | .-. |' ,-.  ||  .--'`-.  /  
+.-'    || '-' '\ '-'  ||  |    /  `-. 
+`-----' |  |-'  `--`--'`--'   `-----' 
+        `--'           
+        Open Source Roblox Menu
+]]
+
 local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/shlexware/Orion/main/source')))()
 local Window = OrionLib:MakeWindow({Name = "Sparz", HidePremium = false, SaveConfig = false, ConfigFolder = "Sparz", IntroEnabled = true, IntroText = "Sparz Menu by Eriz", IntroIcon = ""})
 repeat task.wait() until game:IsLoaded()
@@ -174,6 +185,18 @@ upg:AddButton({
     end
 })
 -------------------------------------------------------
+local drill = Window:MakeTab({
+    Name = "Drill",
+    Icon = "rbxassetid://4687804717",
+    PremiumOnly = false
+})
+
+local col = drill:AddSection({
+    Name = "Collected"
+})
+local getCoins = drill:AddLabel("Coins: ".."0")
+local getGems = drill:AddLabel("Gems: ".."0")
+-------------------------------------------------------
 local misc = Window:MakeTab({
     Name = "Misc",
     Icon = "rbxassetid://10016751132",
@@ -268,6 +291,10 @@ game:GetService("RunService").RenderStepped:Connect(function()
     end
     total = sfm.Suffix(eggvalues[valnum] * amount)
     cost:Set("Cost: "..total)
+    local setCoins = game.HttpService:JSONDecode(game.Players.LocalPlayer:GetAttribute("DrillBalance")).Coins
+    local setGems = game.HttpService:JSONDecode(game.Players.LocalPlayer:GetAttribute("DrillBalance")).Gems
+    getCoins:Set("Coins "..sfm.Suffix(setCoins))
+    getGems:Set("Gems "..sfm.Suffix(setGems))
 end)
 
 
