@@ -31,7 +31,7 @@ OrionLib:MakeNotification({
     Name = "Sparz",
     Content = "Welcome to Sparz Menu",
     Image = "rbxassetid://4483345998",
-    Time = 1.5
+    Time = 5
 })
 -------------------------------------------------------
 local Tab = Window:MakeTab({
@@ -196,6 +196,12 @@ local col = drill:AddSection({
 })
 local getCoins = drill:AddLabel("Coins: ".."0")
 local getGems = drill:AddLabel("Gems: ".."0")
+drill:AddButton({
+    Name = "Teleport to Drill",
+    Callback = function()
+        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-1433.43994, 39.5882988, -5488.22998)
+    end
+})
 -------------------------------------------------------
 local misc = Window:MakeTab({
     Name = "Misc",
@@ -265,6 +271,7 @@ local cred = Window:MakeTab({
 })
 
 cred:AddLabel("Developed by Eriz")
+cred:AddLabel("Inspired by Zeta")
 cred:AddLabel("Interface by shlexware")
 -------------------------------------------------------
 game:GetService("RunService").RenderStepped:Connect(function()
@@ -293,8 +300,8 @@ game:GetService("RunService").RenderStepped:Connect(function()
     cost:Set("Cost: "..total)
     local setCoins = game.HttpService:JSONDecode(game.Players.LocalPlayer:GetAttribute("DrillBalance")).Coins
     local setGems = game.HttpService:JSONDecode(game.Players.LocalPlayer:GetAttribute("DrillBalance")).Gems
-    getCoins:Set("Coins "..sfm.Suffix(setCoins))
-    getGems:Set("Gems "..sfm.Suffix(setGems))
+    getCoins:Set("Coins: "..sfm.Suffix(setCoins))
+    getGems:Set("Gems: "..sfm.Suffix(setGems))
 end)
 
 
