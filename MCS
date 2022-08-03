@@ -276,6 +276,64 @@ drill:AddButton({
     end
 })
 -------------------------------------------------------
+local gps = Window:MakeTab({
+    Name = "Gamepass",
+    Icon = "rbxassetid://6458974334",
+    PremiumOnly = false
+})
+vis:AddLabel("( ! ) Speeds up hatching animation")
+gps:AddButton({
+    Name = "Fast Egg Open++",
+    Callback = function()
+        lp:SetAttribute("hatchSpeed", 100)
+    end
+})
+local vis = gps:AddSection({
+    Name = " "
+})
+
+vis:AddLabel("( ! ) Options below are only visual")
+vis:AddButton({
+    Name = "Get VIP",
+    Callback = function()
+        lp = game:GetService("Players").LocalPlayer
+        local gp = Instance.new("BoolValue")
+        gp.Name = "VIP"
+        gp.Parent = lp
+        gp.Value = true 
+    end
+})
+vis:AddButton({
+    Name = "Get 3 Open Eggs",
+    Callback = function()
+        lp = game:GetService("Players").LocalPlayer
+        local gp = Instance.new("BoolValue")
+        gp.Name = "Open 3"
+        gp.Parent = lp
+        gp.Value = true 
+    end
+})
+vis:AddButton({
+    Name = "Get Lucky",
+    Callback = function()
+        lp = game:GetService("Players").LocalPlayer
+        local gp = Instance.new("BoolValue")
+        gp.Name = "Lucky"
+        gp.Parent = lp
+        gp.Value = true 
+    end
+})
+vis:AddButton({
+    Name = "Get Super Lucky",
+    Callback = function()
+        lp = game:GetService("Players").LocalPlayer
+        local gp = Instance.new("BoolValue")
+        gp.Name = "Super Lucky"
+        gp.Parent = lp
+        gp.Value = true 
+    end
+})
+-------------------------------------------------------
 local misc = Window:MakeTab({
     Name = "Misc",
     Icon = "rbxassetid://10016751132",
@@ -364,6 +422,14 @@ cred:AddLabel("Interface by shlexware")
 cred:AddLabel(" ")
 cred:AddLabel("Last Updated: 3rd August 2022")
 cred:AddParagraph("Changelog",[[ 
+[+] Auto Equip Best
+[+] Gamepass Tab
+    Disclaimers: 
+     VIP actually let's you pass through VIP gate
+     Fast Open Egg does speed up hatching animation
+     Rest are purely visuals in the store or hatch
+]])
+cred:AddParagraph("Changelog: 2nd August 2022",[[ 
 [+] Auto Claim Daily
 [+] Separate Pet Upgrades
 [+] Pet Index open remotely
@@ -387,10 +453,7 @@ game:GetService("RunService").RenderStepped:Connect(function()
         end
     end
     if autodaily == true then
-        local args = {
-            [1] = "Coin"
-        }
-        game:GetService("ReplicatedStorage").Remotes.DailyReward:InvokeServer(unpack(args))
+        game:GetService("ReplicatedStorage").Remotes.DailyReward:InvokeServer("Coin")
     end
     if autoclick == true then
         game:GetService("ReplicatedStorage").Remotes.Click:InvokeServer()
