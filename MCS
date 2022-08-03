@@ -281,7 +281,7 @@ local gps = Window:MakeTab({
     Icon = "rbxassetid://6458974334",
     PremiumOnly = false
 })
-vis:AddLabel("( ! ) Speeds up hatching animation")
+gps:AddLabel("( ! ) Speeds up hatching animation")
 gps:AddButton({
     Name = "Fast Egg Open++",
     Callback = function()
