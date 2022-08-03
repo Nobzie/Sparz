@@ -10,7 +10,7 @@
 ]]
 
 local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/shlexware/Orion/main/source')))()
-local Window = OrionLib:MakeWindow({Name = "Sparz", HidePremium = false, SaveConfig = false, ConfigFolder = "Sparz", IntroEnabled = true, IntroText = "Sparz Menu by Eriz", IntroIcon = ""})
+local Window = OrionLib:MakeWindow({Name = "Sparz", HidePremium = false, SaveConfig = true, ConfigFolder = "Sparz", IntroEnabled = true, IntroText = "Sparz by Eriz", IntroIcon = ""})
 repeat task.wait() until game:IsLoaded()
 local sfm = require(game.ReplicatedStorage.Modules:WaitForChild("SuffixModule"))
 local m = (game:GetService("ReplicatedStorage")):WaitForChild("Modules")
@@ -26,14 +26,15 @@ local lp = game.Players.LocalPlayer
 local total
 local autorebirth = false
 local autopick = false
+local autodaily = false
 local autoclick = false
 local abuy = false
 
 OrionLib:MakeNotification({
     Name = "Sparz",
-    Content = "Welcome to Sparz Menu",
+    Content = "Don't forget to report any bugs you might find.",
     Image = "rbxassetid://4483345998",
-    Time = 5
+    Time = 7
 })
 -------------------------------------------------------
 local Tab = Window:MakeTab({
@@ -49,6 +50,8 @@ local auto = Tab:AddSection({
 auto:AddToggle({
     Name = "Auto Click",
     Default = false,
+    Save = true,
+    Flag = "autoclick",
     Callback = function(Value)
         autoclick = Value
     end    
@@ -57,6 +60,8 @@ auto:AddToggle({
 auto:AddToggle({
     Name = "Auto Rebirth",
     Default = false,
+    Save = true,
+    Flag = "autorebirth",
     Callback = function(Value)
         autorebirth = Value
     end    
@@ -65,8 +70,19 @@ auto:AddToggle({
 auto:AddToggle({
     Name = "Auto Buy Pickaxes",
     Default = false,
+    Save = true,
+    Flag = "autobuypickaxes",
     Callback = function(Value)
         autopick = Value
+    end
+})
+auto:AddToggle({
+    Name = "Auto Claim Daily",
+    Default = false,
+    Save = true,
+    Flag = "autodaily",
+    Callback = function(Value)
+        autodaily = Value
     end
 })
 -------------------------------------------------------
@@ -76,11 +92,11 @@ local egg = Window:MakeTab({
     PremiumOnly = false
 })
 
-local pet = egg:AddSection({
+local hatch = egg:AddSection({
     Name = "Hatching"
 })
 
-pet:AddDropdown({
+hatch:AddDropdown({
     Name = "Egg Selection",
     Default = "Starter Egg",
     Options = {"Starter Egg", "Spotted Egg", "Floral Egg", "Desert Egg", "Snow Egg","Cave Egg","Ocean Egg","Volcano Egg","Space Egg","Undead Egg","Heavenly Egg","Devil Egg","Fossil Egg","Tentacle Egg","Mummy Egg","Olympus Egg","Dragon Egg"},
@@ -126,7 +142,7 @@ pet:AddDropdown({
     end    
 })
 
-pet:AddSlider({
+hatch:AddSlider({
     Name = "Amount",
     Min = 1,
     Max = 2,
@@ -139,9 +155,9 @@ pet:AddSlider({
     end    
 })
 
-local cost = pet:AddLabel("Cost: ".."0")
+local cost = hatch:AddLabel("Cost: ".."0")
 
-pet:AddButton({
+hatch:AddButton({
     Name = "Buy",
     Callback = function()
         game:GetService("ReplicatedStorage").Remotes.buyEgg:InvokeServer(selectedegg, amount)
@@ -154,7 +170,7 @@ pet:AddButton({
     end    
 })
 
-pet:AddToggle({
+hatch:AddToggle({
     Name = "Auto Buy",
     Default = false,
     Callback = function(Value)
@@ -269,7 +285,6 @@ local misc = Window:MakeTab({
 local other = misc:AddSection({
     Name = "Other"
 })
-
 misc:AddButton({
     Name = "Try All Codes",
     Callback = function()
@@ -287,7 +302,7 @@ misc:AddButton({
 misc:AddButton({
     Name = "Anti AFK",
     Callback = function()
-        for i,v in pairs(getconnections(Players.LocalPlayer.Idled)) do
+        for i,v in pairs(getconnections(lp.Idled)) do
           v:Disable()
         end
     end
@@ -346,6 +361,15 @@ local cred = Window:MakeTab({
 cred:AddLabel("Developed by Eriz")
 cred:AddLabel("Inspired by Zeta")
 cred:AddLabel("Interface by shlexware")
+cred:AddLabel(" ")
+cred:AddLabel("Last Updated: 3rd August 2022")
+cred:AddParagraph("Changelog",[[ 
+[+] Auto Claim Daily
+[+] Separate Pet Upgrades
+[+] Pet Index open remotely
+[+] Potion Shop open remotely
+[+] Menu settings save automatically
+]])
 -------------------------------------------------------
 game:GetService("RunService").RenderStepped:Connect(function()
     local rebirths = lp:GetAttribute("Rebirths")
@@ -361,6 +385,12 @@ game:GetService("RunService").RenderStepped:Connect(function()
                 game:GetService("ReplicatedStorage").Remotes.BuyPickaxe:InvokeServer(i)
             end
         end
+    end
+    if autodaily == true then
+        local args = {
+            [1] = "Coin"
+        }
+        game:GetService("ReplicatedStorage").Remotes.DailyReward:InvokeServer(unpack(args))
     end
     if autoclick == true then
         game:GetService("ReplicatedStorage").Remotes.Click:InvokeServer()
