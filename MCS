@@ -426,7 +426,6 @@ spacer:AddParagraph("Changelog",[[
 [-] Auto AFK (didn't work)
 ]])
 spacer:AddParagraph("Changelog: 3rd August 2022",[[ 
-[+] Auto Equip Best
 [+] Gamepass Tab
     Disclaimers: 
      VIP actually let's you pass through VIP gate
