@@ -3,7 +3,7 @@
  ,---.                                
 '   .-'  ,---.  ,--,--.,--.--.,-----. 
 `.  `-. | .-. |' ,-.  ||  .--'`-.  /  
-.-'    || '-' '\ '-'  ||  |    /  `-. 
+.-'    || '-' ' '-'  ||  |    /  `-. 
 `-----' |  |-'  `--`--'`--'   `-----' 
         `--'           
         Open Source Roblox Menu
@@ -17,11 +17,11 @@ local m = (game:GetService("ReplicatedStorage")):WaitForChild("Modules")
 local uiCaller = require(m:WaitForChild("tweenController"))
 local pm = require(game:GetService("ReplicatedStorage").Modules.pickaxesModule)
 
-local twcodes = {"UPDATE7", "UPDATE6", "UPDATE5", "UPDATE4", "UPDATE3", "30KLIKES", "10KLIKES", "20KLIKES", "1KLIKES", "RELEASE", "Spyder"}
+local twcodes = {"UPDATE6", "UPDATE5", "UPDATE4", "UPDATE3", "30KLIKES", "20KLIKES", "10KLIKES", "5KLIKES", "1KLIKES", "RELEASE", "Spyder"}
 local selectedegg = "Starter Egg"
+local eggvalues = {se = 320, spe = 1200, fe = 10000, de = 100000, sne = 1000000, ce = 7500000, oe = 20000000, je = 120000000, ve = 400000000, spae = 1800000000, ue = 15000000000, he = 150000000000, dve = 500000000000, foe = 100000000000000, te = 500000000000000, me = 15000000000000000, ole = 35000000000000000, de = 300000000000000000, she = 1000000000000000000}
 local amount = 1
 local valnum = 1
-local eggvalues = {se = 320, spe = 1200, fe = 10000, de = 100000, sne = 1000000, ce = 7500000, oe = 20000000, je = 120000000, ve = 400000000, spae = 1800000000, ue = 15000000000, he = 150000000000, dve = 500000000000, foe = 100000000000000, te = 500000000000000, me = 15000000000000000, ole = 35000000000000000, de = 300000000000000000, she = 1000000000000000000}
 local lp = game.Players.LocalPlayer
 local total
 local autorebirth = false
@@ -29,6 +29,24 @@ local autopick = false
 local autodaily = false
 local autoclick = false
 local abuy = false
+local aup = false
+local isUp = false
+
+function craftPets()
+    for i,v in pairs(game:GetService("HttpService"):JSONDecode(game.Players.LocalPlayer:GetAttribute("inventory"))) do
+        for a,b in pairs(v) do
+            game:GetService("ReplicatedStorage").Remotes.CraftToGold:FireServer(b)
+            game:GetService("ReplicatedStorage").Remotes.CraftToGold:FireServer(b,"Golden")
+            game:GetService("ReplicatedStorage").Remotes.CraftToGold:FireServer(b,"Diamond")
+            game:GetService("ReplicatedStorage").Remotes.CraftToGold:FireServer(b,"Emerald")
+            game:GetService("ReplicatedStorage").Remotes.CraftToGold:FireServer(b,"Darkmatter") 
+            --break
+        end
+        break
+    end
+    wait(1/32)
+    isUp = false
+end
 
 OrionLib:MakeNotification({
     Name = "Sparz",
@@ -177,7 +195,16 @@ local pets = Window:MakeTab({
     Icon = "rbxassetid://4814044817",
     PremiumOnly = false
 })
-
+pets:AddToggle({
+    Name = "Auto Upgrade",
+    Default = false,
+    Callback = function(Value)
+        aup = Value
+    end
+})
+local sep1 = pets:AddSection({
+    Name = " "
+})
 pets:AddButton({
     Name = "Upgrade Pets Fully",
     Callback = function()
@@ -192,7 +219,7 @@ pets:AddButton({
         end
     end
 })
-local sep = pets:AddSection({
+local sep2 = pets:AddSection({
     Name = " "
 })
 pets:AddButton({
@@ -264,7 +291,7 @@ local getGems = col:AddLabel("Gems: ".."0")
 col:AddButton({
     Name = "Teleport to Drill",
     Callback = function()
-        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-1433.43994, 39.5882988, -5488.22998)
+        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-1433.43994, 42.5882988, -5488.22998)
     end
 })
 ------------------------------------------------------- 
@@ -279,19 +306,91 @@ local getOM = stats:AddLabel("Ores Mined: ".."0")
 local getEO = stats:AddLabel("Eggs Opened: ".."0")
 local getTS = stats:AddLabel("Time Spent: ".."0")
 -------------------------------------------------------
-local gps = Window:MakeTab({
-    Name = "Gamepass",
-    Icon = "rbxassetid://6458974334",
+local misc = Window:MakeTab({
+    Name = "Misc",
+    Icon = "rbxassetid://10016751132",
     PremiumOnly = false
 })
-gps:AddLabel("( ! ) Speeds up hatching animation")
-gps:AddButton({
+local fpsCounter = misc:AddLabel("FPS: ".."0")
+local stgs = misc:AddSection({
+    Name = " "
+})
+
+stgs:AddButton({
+    Name = "Try All Codes",
+    Callback = function()
+        for i,v in pairs(twcodes) do
+            game:GetService("ReplicatedStorage").Remotes.RedeemCode:InvokeServer(v)
+        end
+        OrionLib:MakeNotification({
+            Name = "Sparz",
+            Content = "All codes applied",
+            Image = "rbxassetid://4483345998",
+            Time = 1.5
+        })
+    end
+})
+
+local localplay = misc:AddSection({
+    Name = " "
+})
+localplay:AddButton({
+    Name = "Sit",
+    Callback = function()
+        game.Players.LocalPlayer.Character.Humanoid.Sit = true
+    end    
+})
+localplay:AddSlider({
+    Name = "Walk Speed",
+    Min = 0,
+    Max = 200,
+    Default = 20,
+    Color = Color3.fromRGB(255,255,255),
+    Increment = 1,
+    ValueName = "",
+    Callback = function(Value)
+        walkSpeed = Value
+    end    
+})
+localplay:AddButton({
+    Name = "Apply",
+    Callback = function()
+        game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = walkSpeed
+        OrionLib:MakeNotification({
+            Name = "Sparz",
+            Content = "Walk Speed changed",
+            Image = "rbxassetid://4483345998",
+            Time = 1.5
+        })
+    end    
+})
+
+local userint = misc:AddSection({
+    Name = " "
+})
+userint:AddButton({
+    Name = "Open Pet Index",
+    Callback = function()
+        uiCaller.openUI("glossary12345")
+    end    
+})
+userint:AddButton({
+    Name = "Open Potion Shop",
+    Callback = function()
+        uiCaller.openUI("potionShop123")
+    end    
+})
+local gps = misc:AddSection({
+    Name = " "
+})
+misc:AddLabel("( ! ) Speeds up hatching animation")
+misc:AddButton({
     Name = "Fast Egg Open++",
     Callback = function()
         lp:SetAttribute("hatchSpeed", 100)
     end
 })
-local vis = gps:AddSection({
+local vis = misc:AddSection({
     Name = " "
 })
 
@@ -336,74 +435,35 @@ vis:AddButton({
         gp.Value = true 
     end
 })
--------------------------------------------------------
-local misc = Window:MakeTab({
-    Name = "Misc",
-    Icon = "rbxassetid://10016751132",
-    PremiumOnly = false
-})
-local fpsCounter = misc:AddLabel("FPS: ".."0")
-local stgs = misc:AddSection({
-    Name = " "
-})
-
-stgs:AddButton({
-    Name = "Try All Codes",
+vis:AddButton({
+    Name = "Get Secret Hunter",
     Callback = function()
-        for i,v in pairs(twcodes) do
-            game:GetService("ReplicatedStorage").Remotes.RedeemCode:InvokeServer(v)
-        end
-        OrionLib:MakeNotification({
-            Name = "Sparz",
-            Content = "All codes applied",
-            Image = "rbxassetid://4483345998",
-            Time = 1.5
-        })
+        lp = game:GetService("Players").LocalPlayer
+        local gp = Instance.new("BoolValue")
+        gp.Name = "Secret Hunter"
+        gp.Parent = lp
+        gp.Value = true 
     end
 })
-
-local localplay = misc:AddSection({
-    Name = " "
-})
-localplay:AddSlider({
-    Name = "Walk Speed",
-    Min = 0,
-    Max = 200,
-    Default = 20,
-    Color = Color3.fromRGB(255,255,255),
-    Increment = 1,
-    ValueName = "walkSpeed",
-    Callback = function(Value)
-        walkSpeed = Value
-    end    
-})
-localplay:AddButton({
-    Name = "Apply",
+vis:AddButton({
+    Name = "Get Crafted Hatch",
     Callback = function()
-        game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = walkSpeed
-        OrionLib:MakeNotification({
-            Name = "Sparz",
-            Content = "Walk Speed changed",
-            Image = "rbxassetid://4483345998",
-            Time = 1.5
-        })
-    end    
+        lp = game:GetService("Players").LocalPlayer
+        local gp = Instance.new("BoolValue")
+        gp.Name = "Crafted Hatch"
+        gp.Parent = lp
+        gp.Value = true 
+    end
 })
-
-local userint = misc:AddSection({
-    Name = " "
-})
-userint:AddButton({
-    Name = "Open Pet Index",
+vis:AddButton({
+    Name = "Get Better Upgrade",
     Callback = function()
-        uiCaller.openUI("glossary12345")
-    end    
-})
-userint:AddButton({
-    Name = "Open Potion Shop",
-    Callback = function()
-        uiCaller.openUI("potionShop123")
-    end    
+        lp = game:GetService("Players").LocalPlayer
+        local gp = Instance.new("BoolValue")
+        gp.Name = "Better Upgrade"
+        gp.Parent = lp
+        gp.Value = true 
+    end
 })
 -------------------------------------------------------
 local cred = Window:MakeTab({
@@ -418,8 +478,15 @@ cred:AddLabel("Interface by shlexware")
 local spacer = cred:AddSection({
     Name = " "
 })
-spacer:AddLabel("Last Updated: 7th August 2022") 
+spacer:AddLabel("Last Updated: 8th August 2022") 
 spacer:AddParagraph("Changelog",[[ 
+[+] Fixed Teleport to Drill issue
+[+] Added Ability to Sit
+[+] Added Auto Pet Upgrade
+[+] Added more Visual Gamepasses
+[/] Moved Gamepasses to Misc tab
+]])
+spacer:AddParagraph("Changelog: 7th August 2022",[[ 
 [+] Shinobi Egg
 ]])
 spacer:AddParagraph("Changelog: 4th August 2022",[[ 
@@ -471,6 +538,12 @@ game:GetService("RunService").RenderStepped:Connect(function()
     end
     if abuy == true then
         game:GetService("ReplicatedStorage").Remotes.buyEgg:InvokeServer(selectedegg, amount)
+    end
+    if aup == true then
+        if isUp == false then
+            isUp = true
+            craftPets()
+        end
     end
     total = sfm.Suffix(eggvalues[valnum] * amount)
     cost:Set("Cost: "..total)
