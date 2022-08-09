@@ -30,7 +30,9 @@ local autodaily = false
 local autoclick = false
 local abuy = false
 local aup = false
+local aafk = false
 local isUp = false
+local isAfk = false
 
 function craftPets()
     for i,v in pairs(game:GetService("HttpService"):JSONDecode(game.Players.LocalPlayer:GetAttribute("inventory"))) do
@@ -43,8 +45,19 @@ function craftPets()
         end
         wait(1)
     end
-    wait(45)
+    wait(30)
     isUp = false
+end
+
+function afkClick()
+    local vu = game:GetService("VirtualUser")
+    game:GetService("Players").LocalPlayer.Idled:connect(function()
+        vu:Button2Down(Vector2.new(0,0),workspace.CurrentCamera.CFrame)
+        wait(1)
+        vu:Button2Up(Vector2.new(0,0),workspace.CurrentCamera.CFrame)
+    end)
+    wait(10)
+    isAfk = false
 end
 
 OrionLib:MakeNotification({
@@ -310,6 +323,13 @@ local misc = Window:MakeTab({
     Icon = "rbxassetid://10016751132",
     PremiumOnly = false
 })
+misc:AddToggle({
+    Name = "Auto Idle",
+    Default = false,
+    Callback = function(Value)
+        aafk = Value
+    end
+})
 local fpsCounter = misc:AddLabel("FPS: ".."0")
 local stgs = misc:AddSection({
     Name = " "
@@ -480,6 +500,7 @@ local spacer = cred:AddSection({
 spacer:AddLabel("Last Updated: 8th August 2022") 
 spacer:AddParagraph("Changelog",[[ 
 [+] Fixed Teleport to Drill issue
+[+] Added Anti Idle
 [+] Added Ability to Sit
 [+] Added Auto Pet Upgrade
 [+] Added more Visual Gamepasses
@@ -542,6 +563,12 @@ game:GetService("RunService").RenderStepped:Connect(function()
         if isUp == false then
             isUp = true
             craftPets()
+        end
+    end
+    if aafk == true then
+        if isAfk == false then
+            isAfk = true
+            afkClick()
         end
     end
     total = sfm.Suffix(eggvalues[valnum] * amount)
