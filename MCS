@@ -40,11 +40,10 @@ function craftPets()
             game:GetService("ReplicatedStorage").Remotes.CraftToGold:FireServer(b,"Diamond")
             game:GetService("ReplicatedStorage").Remotes.CraftToGold:FireServer(b,"Emerald")
             game:GetService("ReplicatedStorage").Remotes.CraftToGold:FireServer(b,"Darkmatter") 
-            --break
         end
-        break
+        wait(1)
     end
-    wait(1/32)
+    wait(45)
     isUp = false
 end
 
