@@ -60,6 +60,16 @@ function afkClick()
     isAfk = false
 end
 
+function rewardTime()
+    local rewardTime = 0
+    for i,v in pairs(game.HttpService:JSONDecode(lp:GetAttribute("DailyRewardTime"))) do
+        rewardTime = v
+    end
+    local collectTime = rewardTime - os.time()
+    local newTime = string.format("%02i:%02i:%02i", collectTime / 3600, collectTime / 60 % 60, collectTime % 60)
+    return newTime
+end
+
 OrionLib:MakeNotification({
     Name = "Sparz",
     Content = "Don't forget to report any bugs you might find.",
@@ -102,6 +112,12 @@ Tab:AddToggle({
         autopick = Value
     end
 })
+
+local sep0 = Tab:AddSection({
+    Name = " "
+})
+
+local getRewardTime = Tab:AddLabel("Time Left: ".."0")
 Tab:AddToggle({
     Name = "Auto Claim Daily",
     Default = false,
@@ -324,7 +340,7 @@ local misc = Window:MakeTab({
     PremiumOnly = false
 })
 misc:AddToggle({
-    Name = "Auto Idle",
+    Name = "Anti Idle",
     Default = false,
     Callback = function(Value)
         aafk = Value
@@ -497,8 +513,12 @@ cred:AddLabel("Interface by shlexware")
 local spacer = cred:AddSection({
     Name = " "
 })
-spacer:AddLabel("Last Updated: 8th August 2022") 
+spacer:AddLabel("Last Updated: 10th August 2022") 
 spacer:AddParagraph("Changelog",[[ 
+[+] Bug fixes
+[+] Added Daily Reward timer
+]])
+spacer:AddParagraph("Changelog: 8th August 2022",[[ 
 [+] Fixed Teleport to Drill issue
 [+] Added Anti Idle
 [+] Added Ability to Sit
@@ -581,6 +601,7 @@ game:GetService("RunService").RenderStepped:Connect(function()
     getEO:Set("Eggs Opened: "..sfm.Suffix(game.Players.LocalPlayer:GetAttribute("TotalEggOpens")))
     getOM:Set("Ores Mined: "..sfm.Suffix(game.Players.LocalPlayer:GetAttribute("TotalClicks")))
     getPP:Set("Pet Power: "..sfm.Suffix(game.Players.LocalPlayer:GetAttribute("PetPower")))
+    getRewardTime:Set("Time Left: "..rewardTime())
 end)
 
 
