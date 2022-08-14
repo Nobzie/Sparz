@@ -24,7 +24,6 @@ local amount = 1
 local valnum = 1
 local lp = game.Players.LocalPlayer
 local total
-local newName = ""
 local autorebirth = false
 local autopick = false
 local autodaily = false
@@ -225,29 +224,11 @@ local pets = Window:MakeTab({
     Name = "Pets",
     Icon = "rbxassetid://4814044817",
     PremiumOnly = false
-})
-pets:AddTextbox({
-	Name = "Pet Name",
-	Default = "Sparz",
-	TextDisappear = true,
-	Callback = function(Value)
-		newName = Value
-	end	  
-})
-pets:AddButton({
-    Name = "Change Names",
-    Callback = function()
-        for i,v in pairs(game:GetService("HttpService"):JSONDecode(game.Players.LocalPlayer:GetAttribute("inventory"))) do
-            for a,b in pairs(v) do
-                game:GetService("ReplicatedStorage").Remotes.RenamePet:FireServer(b, newName)
-            end
-        end
-    end    
-})
+})--[[
 local sep0 = pets:AddSection({
     Name = " "
 })
-
+]]
 pets:AddToggle({
     Name = "Auto Upgrade",
     Default = false,
@@ -373,6 +354,7 @@ misc:AddToggle({
     end
 })
 local fpsCounter = misc:AddLabel("FPS: ".."0")
+local pingCounter = misc:AddLabel("Ping: ".."0")
 local stgs = misc:AddSection({
     Name = " "
 })
@@ -401,6 +383,12 @@ localplay:AddButton({
         game.Players.LocalPlayer.Character.Humanoid.Sit = true
     end    
 })
+localplay:AddButton({
+    Name = "Launch",
+    Callback = function()
+        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame.x, 1500, game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame.z)
+    end    
+})
 localplay:AddSlider({
     Name = "Walk Speed",
     Min = 0,
@@ -426,16 +414,41 @@ localplay:AddButton({
     end    
 })
 
+localplay:AddSlider({
+    Name = "Jump Power",
+    Min = 0,
+    Max = 200,
+    Default = 7.2,
+    Color = Color3.fromRGB(255,255,255),
+    Increment = 1,
+    ValueName = "",
+    Callback = function(Value)
+        jumpPower = Value
+    end    
+})
+localplay:AddButton({
+    Name = "Apply",
+    Callback = function()
+        game.Players.LocalPlayer.Character.Humanoid.JumpHeight = jumpPower
+        OrionLib:MakeNotification({
+            Name = "Sparz",
+            Content = "Jump Power changed",
+            Image = "rbxassetid://4483345998",
+            Time = 1.5
+        })
+    end    
+})
+
 local userint = misc:AddSection({
     Name = " "
 })
-userint:AddButton({
+misc:AddButton({
     Name = "Open Pet Index",
     Callback = function()
         uiCaller.openUI("glossary12345")
     end    
 })
-userint:AddButton({
+misc:AddButton({
     Name = "Open Potion Shop",
     Callback = function()
         uiCaller.openUI("potionShop123")
@@ -455,8 +468,8 @@ local vis = misc:AddSection({
     Name = " "
 })
 
-vis:AddLabel("( ! ) Options below are only visual")
-vis:AddButton({
+misc:AddLabel("( ! ) Options below are only visual")
+misc:AddButton({
     Name = "Get VIP",
     Callback = function()
         lp = game:GetService("Players").LocalPlayer
@@ -466,7 +479,7 @@ vis:AddButton({
         gp.Value = true 
     end
 })
-vis:AddButton({
+misc:AddButton({
     Name = "Get 3 Open Eggs",
     Callback = function()
         lp = game:GetService("Players").LocalPlayer
@@ -476,7 +489,7 @@ vis:AddButton({
         gp.Value = true 
     end
 })
-vis:AddButton({
+misc:AddButton({
     Name = "Get Lucky",
     Callback = function()
         lp = game:GetService("Players").LocalPlayer
@@ -486,7 +499,7 @@ vis:AddButton({
         gp.Value = true 
     end
 })
-vis:AddButton({
+misc:AddButton({
     Name = "Get Super Lucky",
     Callback = function()
         lp = game:GetService("Players").LocalPlayer
@@ -496,7 +509,7 @@ vis:AddButton({
         gp.Value = true 
     end
 })
-vis:AddButton({
+misc:AddButton({
     Name = "Get Secret Hunter",
     Callback = function()
         lp = game:GetService("Players").LocalPlayer
@@ -506,7 +519,7 @@ vis:AddButton({
         gp.Value = true 
     end
 })
-vis:AddButton({
+misc:AddButton({
     Name = "Get Crafted Hatch",
     Callback = function()
         lp = game:GetService("Players").LocalPlayer
@@ -516,7 +529,7 @@ vis:AddButton({
         gp.Value = true 
     end
 })
-vis:AddButton({
+misc:AddButton({
     Name = "Get Better Upgrade",
     Callback = function()
         lp = game:GetService("Players").LocalPlayer
@@ -543,6 +556,9 @@ local spacer = cred:AddSection({
 spacer:AddLabel("Last Updated: 14th August 2022") 
 spacer:AddParagraph("Changelog",[[ 
 [+] Pirate Egg
+[+] Added Ability to Launch
+[+] Added Jump Power control
+[+] Ping Counter
 ]])
 spacer:AddParagraph("Changelog: 10th August 2022",[[ 
 [+] Bug fixes
@@ -584,7 +600,9 @@ spacer:AddParagraph("Changelog: 2nd August 2022",[[
 ]])
 -------------------------------------------------------
 game:GetService("RunService").RenderStepped:Connect(function()
+
     fpsCounter:Set("FPS: "..Workspace:GetRealPhysicsFPS())
+    pingCounter:Set("Ping: "..game:GetService("Stats").Network.ServerStatsItem["Data Ping"]:GetValueString())
     local rebirths = lp:GetAttribute("Rebirths")
     local currentpick = lp:GetAttribute('equippedPick')
     if autorebirth == true then
